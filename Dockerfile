@@ -1,6 +1,8 @@
 FROM ubuntu
+ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update
 RUN apt-get install -y python
+RUN apt-get install -y apache2
 RUN echo 1.0 >> /etc/version && apt-get install -y git \
 		 && apt-get install -y iputils-ping
 RUN mkdir /datos1
@@ -43,8 +45,10 @@ RUN mkdir $dir1 && mkdir $dir2
 
 ##EXPOSE##
 #RUN  apt-get install -y apache2
-#EXPOSE 80
-#add entrypoint.sh /datos2
+EXPOSE 80
+
+#va con la forma1##
+#ADD entrypoint.sh /datos2
 
 
 ##Volumen##
@@ -53,9 +57,13 @@ VOLUME  ["/var/www/html"]
 
 
 ##CMD##
+##forma1##
 #CMD /datos2/entrypoint.sh
+
+##forma2##
+CMD ["/usr/sbin/apachectl", "-D", "FOREGROUND"]
 
 
 ##ENTRYPOINT##
-#ENTRYPOINT ["/bin/bash"]	
+ENTRYPOINT ["/bin/bash"]	
  
